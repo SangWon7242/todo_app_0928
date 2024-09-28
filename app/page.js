@@ -9,12 +9,7 @@ const NewTodoForm = ({ addTodo: _addTodo }) => {
     if (newTodoTitle.trim().length == 0) return;
 
     const title = newTodoTitle.trim();
-    const newTodo = {
-      id: null,
-      title,
-    };
-
-    _addTodo(newTodo);
+    _addTodo(title);
     setNewTodoTitle("");
   };
 
@@ -42,10 +37,16 @@ const App = () => {
   const [todos, setTodos] = useState([]);
   const [lastTodoId, setLastTodoId] = useState(0);
 
-  const addTodo = (newTodo) => {
-    newTodo.id = lastTodoId + 1;
+  const addTodo = (title) => {
+    const id = lastTodoId + 1;
+
+    const newTodo = {
+      id,
+      title,
+    };
+
     setTodos([...todos, newTodo]);
-    setLastTodoId(newTodo.id);
+    setLastTodoId(id);
   };
 
   return (
