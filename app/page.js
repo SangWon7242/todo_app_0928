@@ -31,7 +31,7 @@ const NewTodoForm = ({ addTodo: _addTodo }) => {
 
 const TodoListItem = ({ todo, removeTodo: _removeTodo }) => {
   const [editMode, setEditMode] = useState(false);
-  console.log(editMode);
+  const [newTodoTitle, setNewTodoTitle] = useState(todo.title);
 
   const removeTodo = () => {
     _removeTodo(todo.id);
@@ -43,6 +43,7 @@ const TodoListItem = ({ todo, removeTodo: _removeTodo }) => {
 
   const cancelEdit = () => {
     setEditMode(false);
+    setNewTodoTitle(todo.title);
   };
 
   return (
@@ -53,7 +54,11 @@ const TodoListItem = ({ todo, removeTodo: _removeTodo }) => {
           <input
             className="input input-bordered"
             type="text"
+            value={newTodoTitle}
             placeholder="새 할일을 입력해주세요."
+            onChange={(e) => {
+              setNewTodoTitle(e.target.value);
+            }}
           />
           <button className="btn btn-outline btn-success" onClick={cancelEdit}>
             수정완료
