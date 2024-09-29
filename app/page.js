@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { produce } from "immer";
 
 const NewTodoForm = ({ todoStatus }) => {
   const [newTodoTitle, setNewTodoTitle] = useState("");
@@ -124,19 +125,33 @@ const useTodoStatus = () => {
       title,
     };
 
-    setTodos([...todos, newTodo]);
+    // setTodos(produce(todos, (draft) => draft.push(newTodo)));
+    setTodos([...todos, newTodo]); // 기존방식
     setLastTodoId(id);
   };
 
   const removeTodo = (id) => {
-    const newTodos = todos.filter((todo) => todo.id != id);
-    setTodos(newTodos);
+    // setTodos(todos.filter((todo) => todo.id != id)); // 기존방식
+    setTodos(
+      produce(todos, (draft) => {
+        const index = draft.findIndex((todo) => todo.id == id);
+        draft.splice(index, 1);
+      })
+    ); // immer 방식
   };
 
   const modifyTodo = (id, title) => {
+    /*
+    // 일반
     const newTodos = todos.map((todo) =>
       todo.id != id ? todo : { ...todo, title }
     );
+    */
+
+    const newTodos = produce(todos, (draft) => {
+      const index = draft.findIndex((todo) => todo.id == id);
+      draft[index].title = title;
+    });
 
     setTodos(newTodos);
   };
