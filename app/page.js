@@ -1,22 +1,31 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { produce } from "immer";
 
 const NewTodoForm = ({ todoStatus }) => {
   const [newTodoTitle, setNewTodoTitle] = useState("");
+  const inputRef = useRef(null);
 
   const addTodo = () => {
-    if (newTodoTitle.trim().length == 0) return;
+    if (newTodoTitle.trim().length == 0) {
+      alert("할 일을 입력해주세요.");
+
+      inputRef.current.focus();
+      return;
+    }
 
     const title = newTodoTitle.trim();
     todoStatus.addTodo(title);
     setNewTodoTitle("");
+
+    inputRef.current.focus();
   };
 
   return (
     <form className="flex gap-[5px]" onSubmit={(e) => e.preventDefault()}>
       <input
+        ref={inputRef}
         className="input input-bordered"
         type="text"
         value={newTodoTitle}
